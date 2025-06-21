@@ -1,6 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { message0 } from '../HW1'
-import s from './MessageSender.module.css'
+import { Box, Button, TextField, Paper } from '@mui/material'
 
 // компонента, которая тестирует вашу компоненту (не изменять, any не трогать)
 const MessageSender = (props: any) => {
@@ -21,6 +21,7 @@ const MessageSender = (props: any) => {
     }, [text])
 
     const addMessage = () => {
+        if (text.trim() === '') return;
         setMessages([
             ...messages,
             {
@@ -36,7 +37,7 @@ const MessageSender = (props: any) => {
     }
 
     const onKeyDown = (e: any) => {
-        e.key === 'Enter' && e.shiftKey && addMessage()
+        if (e.key === 'Enter' && e.shiftKey) addMessage()
     }
 
     return (
@@ -45,30 +46,59 @@ const MessageSender = (props: any) => {
                 <M key={'message' + m.id} message={m} />
             ))}
 
-            <div id={'hw1-send-message-form'} className={s.sendForm}>
-                <textarea
-                    id={'hw1-textarea'}
-                    className={s.textarea}
-                    ref={textareaRef}
-
-                    title={'Shift+Enter for send'}
-                    placeholder={'Type your message'}
+            <Box
+                id={'hw1-send-message-form'}
+                display="flex"
+                alignItems="flex-end"
+                mt={4}
+                p={2}
+                bgcolor="#f6f8fa"
+                borderRadius="20px"
+                boxShadow={0}
+            >
+                <TextField
+                    id="hw1-textarea"
+                    inputRef={textareaRef}
+                    variant="outlined"
+                    multiline
+                    maxRows={4}
+                    placeholder="Type your message"
                     value={text}
-
                     onChange={onChange}
                     onKeyDown={onKeyDown}
+                    fullWidth
+                    sx={{
+                        background: '#fff',
+                        borderRadius: 2,
+                        mr: 2,
+                        '& textarea': {
+                            resize: 'none',
+                            padding: '14px',
+                        },
+                    }}
+                    InputProps={{
+                        style: { fontSize: 18, minHeight: 50, borderRadius: 16 }
+                    }}
+                    title="Shift+Enter for send"
                 />
-                <button
-                    id={'hw1-button'}
-                    className={s.button}
-
+                <Button
+                    id="hw1-button"
+                    variant="contained"
+                    color="primary"
+                    size="large"
                     onClick={addMessage}
+                    sx={{
+                        minWidth: 110,
+                        height: 50,
+                        borderRadius: 20,
+                        fontWeight: 600,
+                        fontSize: 18,
+                        boxShadow: 0
+                    }}
                 >
-                    {/*текст кнопки могут изменить студенты*/}
                     Send
-                    {/**/}
-                </button>
-            </div>
+                </Button>
+            </Box>
         </>
     )
 }
